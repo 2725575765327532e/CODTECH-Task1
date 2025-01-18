@@ -1,0 +1,40 @@
+A push button counter in a microcontroller is a simple project 
+where a button press increments a counter value. This system is 
+often used in applications such as counting items, user inputs, or events. 
+The microcontroller monitors the button's state and updates the counter accordingly.
+
+const int buttonPin = 2; 
+const int ledPin = 13;   // Optional: LED connected to pin 13 for feedback
+
+// Variables
+int counter = 0;             // Counter to store button presses
+bool buttonState = false;    // Current state of the button
+bool lastButtonState = false; // Previous state of the button
+
+void setup() {
+  pinMode(buttonPin, INPUT_PULLUP); // Set button pin as input with internal pull-up resistor
+  pinMode(ledPin, OUTPUT);         // Set LED pin as output
+  Serial.begin(9600);              // Start serial communication for debugging
+}
+
+void loop() {
+  // Read the current state of the button
+  buttonState = digitalRead(buttonPin);
+
+  // Detect button press (state change from HIGH to LOW)
+  if (buttonState == LOW && lastButtonState == HIGH) {
+    counter++; // Increment counter
+    Serial.print("Button pressed! Counter: ");
+    Serial.println(counter);
+
+    // Optional: Toggle LED for feedback
+    digitalWrite(ledPin, !digitalRead(ledPin));
+    delay(200); // Debounce delay
+  }
+
+  // Update lastButtonState for the next loop iteration
+  lastButtonState = buttonState;
+
+  // Small delay to avoid excessive loop speed
+  delay(10);
+}
